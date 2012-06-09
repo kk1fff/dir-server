@@ -1,0 +1,14 @@
+{
+  "name": "dir-server",
+  "description": "A node server that serves current directory",
+  "version": "0.0.1",
+  "maintainer": [{
+    "name": "kk1fff"
+  }],
+  "dependencies": {
+    "mime": "1.2.5"
+  },
+  "engines": {
+    "node" : "0.6"
+  }
+}
