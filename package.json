@@ -2,9 +2,7 @@
   "name": "dir-server",
   "description": "A node server that serves current directory",
   "version": "0.0.1",
-  "maintainer": [{
-    "name": "kk1fff"
-  }],
+  "author": "patrick wang<kk1fff@gmail.com>",
   "dependencies": {
     "mime": "1.2.5"
   },
@@ -12,5 +10,10 @@
     "node" : "0.6"
   },
   "main": "dirserver.js",
-  "bin": { "dirserver" : "./dirserver.js" }
+  "bin": { "dirserver" : "./dirserver.js" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kk1fff/dir-server.git"
+  },
+  "bugs": "https://github.com/kk1fff/dir-server/issues"
 }
