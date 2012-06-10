@@ -2,6 +2,15 @@
 
 Serve current directory statically.
 
+## Install
+
+__dirserver__ is published to npm. As a shell command, you can install to 
+system globally through
+
+    $ npm install dir-server -g
+    
+And you will get __dirserver__ command.
+
 ## Usage
 
 To make current directory available on the Internet, just type __dirserver__
