@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Node.js libraries.
 var http = require("http");
 var url  = require("url");
