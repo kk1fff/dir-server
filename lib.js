@@ -7,92 +7,88 @@ var fs   = require("fs");
 // Depended libraries.
 var mime = require("mime");
 
+exports = function(setting) {
+  // Configurations
+  var logFormat    = ["client_ip", "req_method", "req_path", "req_host",
+                      "resp_code", "actual_path", "error"];
+  var serverPort   = 8080;
+  var defaultFile  = ["index.html", "index.htm"];
+  var cacheAllowed = false;
+  var cacheSecond  = 3600;
 
-// Configurations
-var logFormat    = ["client_ip", "req_method", "req_path", "req_host",
-                   "resp_code", "actual_path", "error"];
-var serverPort   = 8080;
-var defaultFile  = ["index.html", "index.htm"];
-var cacheAllowed = false;
-var cacheSecond  = 3600;
+  // ---------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
+  var logOutputFunc = console.log;
 
-var logOutputFunc = console.log;
-
-var logger = function(log) {
-  if (log instanceof Object) {
-    var out = "";
-    for (var i = 0; i < logFormat.length; i++) {
-      if (log.hasOwnProperty(logFormat[i])) {
-        out += (log[logFormat[i]] + " ");
+  var logger = function(log) {
+    if (log instanceof Object) {
+      var out = "";
+      for (var i = 0; i < logFormat.length; i++) {
+        if (log.hasOwnProperty(logFormat[i])) {
+          out += (log[logFormat[i]] + " ");
+        }
       }
+      logOutputFunc(out);
+    } else {
+      logOutputFunc(log);
     }
-    logOutputFunc(out);
-  } else {
-    logOutputFunc(log);
-  }
-};
+  };
 
-var sendError404 = function(resp, log, error) {
-  resp.statusCode = 404;
-  resp.end();
-
-  error = error || "Error: 404";
-
-  log['resp_code'] = 404;
-  log['error'] = error;
-  logger(log);
-};
-
-var tryDefaultFile = function(p, serveFileFunc, req, resp, log, count) {
-  count = count || 0;
-
-  if (count < defaultFile.length) {
-    fs.stat(p + "/" + defaultFile[count], function(err, stats) {
-      if (stats === undefined || stats === null || !stats.isFile()) {
-        // Still not found.
-        tryDefaultFile(p, serveFileFunc, req, resp, log, count + 1);
-      } else {
-        // Found.
-        serveFileFunc(p + "/" + defaultFile[count], req, resp, log);
-      }
-    });
-  } else {
-    // Finally, not found.
-    sendError404(resp, log, "Found directionary, but not any default file");
-  }
-};
-
-var buildFileResponseHeader = function(filePath, resp) {
-  resp.setHeader('Content-Type', mime.lookup(filePath));
-
-  if (cacheAllowed) {
-    resp.setHeader('Cache-Control', 'max-age=' + cacheSecond);
-  } else {
-    resp.setHeader('Cache-Control', 'no-cache');    
-  }
-}
-
-var serveFile = function(filePath, req, resp, log) {
-  var fileStream = fs.createReadStream(filePath, {
-    "flags" : "r",
-  });
-
-  buildFileResponseHeader(filePath, resp);
-  resp.statusCode = log['resp_code'] = 200;
-  fileStream.on("data", function(d) {
-    resp.write(d);
-  });
-  fileStream.on("end", function() {
+  var sendError404 = function(resp, log, error) {
+    resp.statusCode = 404;
     resp.end();
-  });
-  logger(log);
-};
 
-exports.generatePathHandler = function(baseDir, setting) {
+    error = error || "Error: 404";
 
+    log['resp_code'] = 404;
+    log['error'] = error;
+    logger(log);
+  };
 
+  var tryDefaultFile = function(p, serveFileFunc, req, resp, log, count) {
+    count = count || 0;
+
+    if (count < defaultFile.length) {
+      fs.stat(p + "/" + defaultFile[count], function(err, stats) {
+        if (stats === undefined || stats === null || !stats.isFile()) {
+          // Still not found.
+          tryDefaultFile(p, serveFileFunc, req, resp, log, count + 1);
+        } else {
+          // Found.
+          serveFileFunc(p + "/" + defaultFile[count], req, resp, log);
+        }
+      });
+    } else {
+      // Finally, not found.
+      sendError404(resp, log, "Found directionary, but not any default file");
+    }
+  };
+
+  var buildFileResponseHeader = function(filePath, resp) {
+    resp.setHeader('Content-Type', mime.lookup(filePath));
+
+    if (cacheAllowed) {
+      resp.setHeader('Cache-Control', 'max-age=' + cacheSecond);
+    } else {
+      resp.setHeader('Cache-Control', 'no-cache');    
+    }
+  }
+
+  var serveFile = function(filePath, req, resp, log) {
+    var fileStream = fs.createReadStream(filePath, {
+      "flags" : "r",
+    });
+
+    buildFileResponseHeader(filePath, resp);
+    resp.statusCode = log['resp_code'] = 200;
+    fileStream.on("data", function(d) {
+      resp.write(d);
+    });
+    fileStream.on("end", function() {
+      resp.end();
+    });
+    logger(log);
+  };
 
   // Build setting -------------------------------
 
@@ -112,8 +108,6 @@ exports.generatePathHandler = function(baseDir, setting) {
   if (setting.hasOwnProperty("mime")) {
     mime.define(setting['mime']);
   }
-
-  
 
   return function(req, resp) {
     var u = url.parse(req.url);

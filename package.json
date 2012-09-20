@@ -9,7 +9,7 @@
   "engines": {
     "node" : "0.6"
   },
-  "main": "dirserver.js",
+  "main": "lib.js",
   "bin": { "dirserver" : "./dirserver.js" },
   "repository": {
     "type": "git",
