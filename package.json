@@ -1,8 +1,8 @@
 {
   "name": "dir-server",
   "description": "A node server that serves current directory",
-  "version": "0.0.1",
-  "author": "patrick wang<kk1fff@gmail.com>",
+  "version": "0.0.2",
+  "author": "patrick wang<kk1fff@patrickz.net>",
   "dependencies": {
     "mime": "1.2.5"
   },
