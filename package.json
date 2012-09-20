@@ -10,7 +10,7 @@
     "node" : "0.6"
   },
   "main": "lib.js",
-  "bin": { "dirserver" : "./dirserver.js" },
+  "bin": { "dirserver" : "./bin.sh" },
   "repository": {
     "type": "git",
     "url": "https://github.com/kk1fff/dir-server.git"
