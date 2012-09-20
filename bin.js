@@ -12,17 +12,20 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+var fs = require('fs');
+var http = require('http');
 var lib = require('./lib.js');
 
 // Process info
 var baseDir = process.cwd();
 var setting = null;
+var serverPort = 8080;
 var server = null;
 
 // Start server ----------------------------------------------------------------
 
 var startServer = function() {
-  server = http.createServer(lib.generatePathHandler(baseDir, setting));
+  server = http.createServer(lib.getServeFunction(baseDir, setting));
   server.listen(serverPort);
   console.log("Serving file based on: " + baseDir);
 };
@@ -33,6 +36,9 @@ fs.readFile(baseDir + "/setting.json", function(err, d) {
   if (err === null || err === undefined) {
     // User has his own setting.
     setting = JSON.parse(d);
+    if (setting && setting.hasOwnProperty("port")) {
+      serverPort = setting['port'];
+    }
     startServer();
   } else {
     startServer();

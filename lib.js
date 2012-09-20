@@ -21,14 +21,18 @@ var fs   = require("fs");
 // Depended libraries.
 var mime = require("mime");
 
-exports = function(setting) {
+exports.getServeFunction = function(baseDir, setting) {
+  if (!setting) {
+    setting = {};
+  }
+
   // Configurations
   var logFormat    = ["client_ip", "req_method", "req_path", "req_host",
                       "resp_code", "actual_path", "error"];
-  var serverPort   = 8080;
   var defaultFile  = ["index.html", "index.htm"];
   var cacheAllowed = false;
   var cacheSecond  = 3600;
+  var serverPort = 8080;
 
   // ---------------------------------------------------------------------------
 
