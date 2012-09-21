@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //   Copyright 2012 Patrick Wang (kk1fff)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
