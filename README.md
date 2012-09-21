@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/kk1fff/dir-server.png)](http://travis-ci.org/kk1fff/dir-server)
 # Dir Server
 
 Serve current directory statically.
